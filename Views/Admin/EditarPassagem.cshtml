@@ -1,0 +1,186 @@
+﻿@inject SinaisPeloMundo.Helper.ISessao Sessao
+@model PassagemModel
+
+@{
+    ViewData["Title"] = "Admin - Editar Passagem";
+}
+
+<main class="container-revisao">
+
+    <aside class="sidebar-dados-pessoais" id="tiSidebar">
+
+        <nav class="sidebar-dados">
+
+            <a href="javascript:history.back()" class="voltar">
+                &lt; Voltar
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaInterprete">
+                Cadastro de intérprete
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaHoteis">
+                Cadastro de reserva de hotel
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaPassagens" class="tela-atual">
+                Cadastro de passagem
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaPacotes">
+
+                Cadastros de pacotes
+
+            </a>
+
+            <a asp-controller="Cliente"
+               asp-action="DadosPessoais">
+
+                Sair
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <section class="cadastro-catalogo">
+        <h1>Editar passagem</h1>
+        <p class="sub-titulo">Preencha os dados abaixo para atualizar esta passagem</p>
+
+        <form asp-action="EditarPassagem" method="post" class="form-dados">
+            <input asp-for="PassagemId" type="hidden" />
+            <div class="campo-dados">
+                <label asp-for="Transporte" class="rotulo-catalogo"></label>
+
+                <select asp-for="Transporte"
+                        asp-items="Html.GetEnumSelectList<TipoTransporte>()"
+                        class="input-catalogo">
+                    <option value="">Selecione o transporte</option>
+                </select>
+
+                <span asp-validation-for="Transporte" class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label asp-for="TipoPassagem" class="rotulo-catalogo">Tipo de passagem</label>
+
+                <select asp-for="TipoPassagem"
+                        asp-items="Html.GetEnumSelectList<TipoPassagem>()"
+                        class="input-catalogo">
+                    <option value="">Selecione o tipo de passagem</option>
+                </select>
+
+                <span asp-validation-for="TipoPassagem" class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label asp-for="Preco" class="rotulo-catalogo">Preço</label>
+
+                <input asp-for="Preco"
+                       type="number"
+                       class="input-catalogo"
+                       placeholder="R$ 0,00" />
+
+                <span asp-validation-for="Preco" class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label asp-for="Poltrona" class="rotulo-catalogo"></label>
+
+                <input asp-for="Poltrona"
+                       type="number"
+                       class="input-catalogo"
+                       placeholder="Digite a poltrona" />
+
+                <span asp-validation-for="Poltrona" class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label asp-for="PlacaTransporte" class="rotulo-catalogo">Placa do Transporte</label>
+
+                <input asp-for="PlacaTransporte"
+                       type="text"
+                       class="input-catalogo"
+                       placeholder="Digite a placa do transporte" />
+
+                <span asp-validation-for="PlacaTransporte" class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label asp-for="HorarioPartida">Horário de Partida</label>
+
+                <input asp-for="HorarioPartida"
+                       type="datetime-local"
+                       class="input-catalogo" />
+
+                <span asp-validation-for="HorarioPartida"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label asp-for="LocalPartida" class="rotulo-catalogo">Local de Partida</label>
+
+                <input asp-for="LocalPartida"
+                       type="text"
+                       class="input-catalogo"
+                       placeholder="Digite o local de partida" />
+
+                <span asp-validation-for="LocalPartida" class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label asp-for="HorarioChegada">Horário de Chegada</label>
+
+                <input asp-for="HorarioChegada"
+                       type="datetime-local"
+                       class="input-catalogo" />
+
+                <span asp-validation-for="HorarioChegada"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados campo-extenso">
+                <label asp-for="LocalChegada" class="rotulo-catalogo">Local de Chegada</label>
+
+                <input asp-for="LocalChegada"
+                       type="text"
+                       class="input-catalogo"
+                       placeholder="Digite o local de chegada" />
+
+                <span asp-validation-for="LocalChegada" class="text-danger"></span>
+            </div>
+
+            <div class="botoes-catalogo">
+
+                <a asp-controller="Admin"
+                   asp-action="ListaPassagens"
+                   class="botao-tipo3 botao-cancelar">
+
+                    Cancelar
+
+                </a>
+
+                <button class="botao-tipo3 btn-catalogo-salvar"
+                        type="submit">
+
+                    Atualizar
+
+                </button>
+
+            </div>
+
+        </form>
+    </section>
+
+</main>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

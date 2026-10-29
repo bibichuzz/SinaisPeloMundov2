@@ -1,0 +1,186 @@
+@inject SinaisPeloMundo.Helper.ISessao Sessao
+@model ClienteModel
+
+@{
+    ViewData["Title"] = "Alterar dados pessoais";
+}
+
+<main class="container-dados">
+
+    <aside class="sidebar-dados-pessoais">
+        <nav class="sidebar-dados">
+            <a asp-controller="Home" asp-action="Index">&lt; Voltar</a>
+            <a asp-controller="Cliente" asp-action="DadosPessoais">Dados Pessoais</a>
+            <a asp-controller="Cliente" asp-action="HistoricoPedidos">Histórico</a>
+
+            @if (Model.Admin)
+            {
+                <a asp-controller="Admin" asp-action="ListaPacotes">
+                    Painel Administrativo
+                </a>
+            }
+
+            <a asp-controller="Login" asp-action="Sair">Sair</a>
+        </nav>
+    </aside>
+
+    <section class="dados-pessoais">
+
+        <h1>Dados Pessoais</h1>
+        <p>Realize a alteração de seus dados</p>
+
+        <form class="form-dados"
+              asp-controller="Cliente"
+              asp-action="AlterarDados"
+              method="post">
+
+            <input type="hidden" asp-for="ClienteId" />
+
+            <div class="campo-dados">
+                <label for="nome">Nome</label>
+                <input id="nome" asp-for="Nome" type="text">
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label for="email">Email</label>
+                <input id="email" asp-for="Email" type="email">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label for="senha">Senha</label>
+                <input id="senha" asp-for="Senha" type="password">
+                <span asp-validation-for="Senha" class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label for="cpf">CPF</label>
+                <input id="cpf" asp-for="Cpf" type="text">
+                <span asp-validation-for="Cpf" class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label for="nascimento">Data de Nascimento</label>
+                <input id="nascimento" asp-for="DtNascimento" type="date">
+                <span asp-validation-for="DtNascimento" class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label for="telefone">Telefone</label>
+                <input id="telefone" asp-for="Telefone" type="tel">
+                <span asp-validation-for="Telefone" class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label for="cep">CEP</label>
+                <input id="cep"
+                       asp-for="Cep"
+                       type="text"
+                       maxlength="8">
+                <span asp-validation-for="Cep" class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label for="cidade">Cidade</label>
+                <input id="cidade"
+                       asp-for="Cidade"
+                       type="text"
+                       maxlength="60"
+                       readonly>
+                <span asp-validation-for="Cidade" class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label for="uf">UF</label>
+                <input id="uf"
+                       asp-for="Uf"
+                       type="text"
+                       maxlength="2"
+                       readonly>
+                <span asp-validation-for="Uf" class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label for="bairro">Bairro</label>
+                <input id="bairro"
+                       asp-for="Bairro"
+                       type="text"
+                       maxlength="60"
+                       readonly>
+                <span asp-validation-for="Bairro" class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label for="numero">Número</label>
+                <input id="numero"
+                       asp-for="Numero"
+                       type="text"
+                       maxlength="5">
+                <span asp-validation-for="Numero" class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label for="complemento">Complemento</label>
+                <input id="complemento"
+                       asp-for="Complemento"
+                       type="text"
+                       maxlength="60">
+                <span asp-validation-for="Complemento" class="text-danger"></span>
+            </div>
+
+            <div class="botoes-dados">
+                <button class="botao-tipo2"
+                        id="botao-alterar"
+                        type="submit">
+                    Salvar alterações
+                </button>
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+<script>
+    document.getElementById("cep").addEventListener("blur", function () {
+
+        let cep = this.value.replace(/\D/g, "");
+        let mensagemCep = document.querySelector("[data-valmsg-for='Cep']");
+
+        // Limpa a mensagem anterior
+        mensagemCep.textContent = "";
+
+        if (cep.length !== 8) {
+            mensagemCep.textContent = "CEP deve conter 8 números.";
+            return;
+        }
+
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(dados => {
+
+                if (dados.erro) {
+                    mensagemCep.textContent = "CEP não encontrado.";
+
+                    // Limpa os campos preenchidos anteriormente
+                    document.getElementById("bairro").value = "";
+                    document.getElementById("cidade").value = "";
+                    document.getElementById("uf").value = "";
+
+                    return;
+                }
+
+                document.getElementById("bairro").value = dados.bairro;
+                document.getElementById("cidade").value = dados.localidade;
+                document.getElementById("uf").value = dados.uf;
+
+                mensagemCep.textContent = "";
+            })
+            .catch(error => {
+                console.error("Erro ao consultar o ViaCEP:", error);
+                mensagemCep.textContent = "Não foi possível consultar o CEP.";
+            });
+    });
+</script>

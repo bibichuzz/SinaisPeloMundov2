@@ -1,0 +1,333 @@
+﻿@inject SinaisPeloMundo.Helper.ISessao Sessao
+@model List<PacoteModel>
+
+@{
+    ViewData["Title"] = "Catálogo - Sinais pelo Mundo";
+}
+
+<main class="container-revisao">
+
+    <aside class="sidebar-dados-pessoais"
+           id="tiSidebar"
+           aria-label="Menu lateral de catálogos">
+
+        <form class="sidebar-filtro">
+
+            <div class="filtro">
+                <p>Filtros</p>
+
+                <span class="material-symbols-outlined">
+                    filter_alt
+                </span>
+            </div>
+
+            <label for="input-destino">
+                Destino
+            </label>
+
+            <select id="input-destino"
+                    class="input-base">
+
+                <option value="">
+                    Todos os destinos
+                </option>
+
+                @foreach (var destino in Model
+                .Select(p => p.Destino)
+                .Distinct())
+                {
+                    <option value="@destino.ToLower()">
+                        @destino
+                    </option>
+                }
+
+            </select>
+
+            <div class="input-datas">
+
+                <label id="filtro-data">
+                    Datas
+                </label>
+
+                <input id="data-ida"
+                       name="data-ida"
+                       type="date">
+
+                <input id="data-volta"
+                       name="data-volta"
+                       type="date">
+
+            </div>
+
+            <div class="filtro-preco">
+
+                <label for="input-preco">
+                    Preço máximo
+                </label>
+
+                <input type="range"
+                       id="input-preco"
+                       min="0"
+                       max="10000"
+                       step="100"
+                       value="10000">
+
+                <p>
+                    Até:
+                    <span id="valor-preco">
+                        R$ 10.000
+                    </span>
+                </p>
+
+            </div>
+
+        </form>
+
+    </aside>
+
+    <section class="catalogo">
+
+        <h1>Todos os pacotes</h1>
+
+        <p>
+            Encontre o pacote ideal para a sua próxima viagem
+        </p>
+
+        <div class="ferramentas-catalogo">
+
+            <form class="busca-wrapper"
+                  id="form-busca"
+                  role="search">
+
+                <span class="material-symbols-outlined icone-busca"
+                      aria-hidden="true">
+                    search
+                </span>
+
+                <input type="text"
+                       id="input-busca"
+                       placeholder="Buscar pacotes, destinos, hotéis...">
+
+            </form>
+
+        </div>
+
+        <div class="home-packages-grid">
+
+            @foreach (var pacote in Model)
+            {
+                <article class="home-package-card card-pacote" data-destino="@pacote.Destino.ToLower()"
+                         data-checkin="@pacote.ReservaHotel.DataCheckin.ToString("yyyy-MM-dd")"
+                         data-checkout="@pacote.ReservaHotel.DataCheckout.ToString("yyyy-MM-dd")"
+                         data-preco="@pacote.Preco">
+
+                    <a asp-controller="Pacote"
+                       asp-action="DetalhesPacote"
+                       asp-route-id="@pacote.PacoteId">
+
+                        <div class="home-package-image">
+                            <img src="@pacote.UrlImagem" alt="Imagem">
+                        </div>
+
+                    </a>
+
+                    <div class="home-package-content">
+
+                        <a asp-controller="Pacote"
+                           asp-action="DetalhesPacote"
+                           asp-route-id="@pacote.PacoteId">
+
+                            <h3 class="home-package-location destino-pacote">
+                                @pacote.Destino
+                            </h3>
+
+                        </a>
+
+                        <p class="home-package-info">
+                            @pacote.ReservaHotel.DataCheckin.ToString("dd/MM/yyyy")
+                            -
+                            @pacote.ReservaHotel.DataCheckout.ToString("dd/MM/yyyy")
+                        </p>
+
+                        <p class="home-package-info">
+                            @pacote.Preco.ToString("C")
+                        </p>
+
+                    </div>
+
+                </article>
+            }
+
+        </div>
+
+    </section>
+    <div class="chat-container">
+        <div class="chat-header">
+            <img src="Assets/img/icone-chat.PNG" alt="Icon">
+            <p>TravelSafe &#x2708;<br>Assistente Virutal</p>
+            <div class="icon-header-chat">
+                <span class="material-symbols-outlined">minimize</span>
+                <span class="material-symbols-outlined">close</span>
+            </div>
+        </div>
+
+        <div class="chat-messages-wrapper">
+            <div class="chat-apresentation">
+                <p>Olá! &#9995;</p>
+                <p> Eu sou o <strong>Safe</strong>, seu assistente de viagem!</p>
+                <p>Como posso te ajudar hoje?</p>
+            </div>
+            <div class="chat-messages">
+                <p class="user-messages">Ótimo, quero viajar!</p>
+                <p class="bot-messages">Que incrível!<br>Qual destino você tem em mente?</p>
+                <p class="user-messages">Teste</p>
+                <p class="bot-messages">Teste</p>
+                <p class="user-messages">Teste</p>
+            </div>
+        </div>
+
+        <div class="send-message">
+            <form action="">
+                <input type="text" id="message" placeholder="Digite sua mensagem...">
+            </form>
+            <button class="send-button">
+                <span class="material-symbols-outlined">send</span>
+            </button>
+        </div>
+    </div>
+
+    <button class="chat-botao">
+        <img src="Assets/img/chat-btn.PNG" alt="Icon">
+    </button>
+
+</main>
+
+@section Scripts {
+
+    <!-- Script Filtros -->
+    <script>
+
+        const inputBusca =
+            document.getElementById("input-busca");
+
+        const inputDestino =
+            document.getElementById("input-destino");
+
+        const dataIda =
+            document.getElementById("data-ida");
+
+        const dataVolta =
+            document.getElementById("data-volta");
+
+        const inputPreco =
+            document.getElementById("input-preco");
+
+        const valorPreco =
+            document.getElementById("valor-preco");
+
+        const cards =
+            document.querySelectorAll(".card-pacote");
+
+        function filtrarPacotes() {
+
+            const busca =
+                inputBusca.value.toLowerCase();
+
+            const destinoFiltro =
+                inputDestino.value.toLowerCase();
+
+            const idaFiltro =
+                dataIda.value;
+
+            const voltaFiltro =
+                dataVolta.value;
+
+            const precoFiltro =
+                parseFloat(inputPreco.value);
+
+            cards.forEach(card => {
+
+                const textoCard =
+                    card.innerText.toLowerCase();
+
+                const destino =
+                    card.dataset.destino;
+
+                const checkin =
+                    card.dataset.checkin;
+
+                const checkout =
+                    card.dataset.checkout;
+
+                const preco =
+                    parseFloat(card.dataset.preco);
+
+                const correspondeBusca =
+                    textoCard.includes(busca);
+
+                const correspondeDestino =
+                    destino.includes(destinoFiltro);
+
+                const correspondeIda =
+                    !idaFiltro || checkin >= idaFiltro;
+
+                const correspondeVolta =
+                    !voltaFiltro || checkout <= voltaFiltro;
+
+                const correspondePreco =
+                    preco <= precoFiltro;
+
+                if (
+                    correspondeBusca &&
+                    correspondeDestino &&
+                    correspondeIda &&
+                    correspondeVolta &&
+                    correspondePreco
+                ) {
+                    card.style.display = "block";
+                }
+                else {
+                    card.style.display = "none";
+                }
+
+            });
+
+        }
+
+        inputBusca.addEventListener(
+            "input",
+            filtrarPacotes
+        );
+
+        inputDestino.addEventListener(
+            "change",
+            filtrarPacotes
+        );
+
+        dataIda.addEventListener(
+            "change",
+            filtrarPacotes
+        );
+
+        dataVolta.addEventListener(
+            "change",
+            filtrarPacotes
+        );
+
+        inputPreco.addEventListener("input", function () {
+
+            valorPreco.innerText =
+                Number(this.value).toLocaleString(
+                    "pt-BR",
+                    {
+                        style: "currency",
+                        currency: "BRL"
+                    }
+                );
+
+            filtrarPacotes();
+
+        });
+
+    </script>
+}

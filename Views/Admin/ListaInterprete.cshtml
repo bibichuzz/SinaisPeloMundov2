@@ -1,0 +1,271 @@
+﻿@inject SinaisPeloMundo.Helper.ISessao Sessao
+@model List<InterpreteModel>
+
+@{
+    ViewData["Title"] = "Admin - Intérpretes";
+}
+
+<main class="container-revisao">
+
+    <aside class="sidebar-dados-pessoais" id="tiSidebar">
+
+        <nav class="sidebar-dados">
+
+            <a href="javascript:history.back()" class="voltar">
+                &lt; Voltar
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaInterprete" class="tela-atual">
+                Cadastro de intérprete
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaHoteis">
+                Cadastro de reserva de hotel
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaPassagens">
+                Cadastro de passagem
+            </a>
+
+            <a
+               asp-controller="Admin"
+               asp-action="ListaPacotes">
+
+                Cadastros de pacotes
+
+            </a>
+
+            <a asp-controller="Cliente"
+               asp-action="DadosPessoais">
+
+                Sair
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <section class="conteudo-catalogo">
+
+        <div class="topo-catalogo">
+
+            <div class="titulos-catalogo">
+
+                <h1>Catálogo de Cadastros de Intérpretes</h1>
+
+                <p class="sub-titulo">
+                    Gerencie os intérpretes cadastrados no sistema.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="ferramentas-catalogo">
+
+            <div class="busca-wrapper">
+
+                <span class="material-symbols-outlined icone-busca">
+                    search
+                </span>
+
+                <input type="text"
+                       class="input-base"
+                       id="input-busca"
+                       placeholder="Buscar intérprete por ID, nome, CPF, e-mail, telefone...">
+
+            </div>
+
+            <a asp-controller="Admin"
+               asp-action="CadastroInterprete">
+
+                <button class="botao-novo">
+                    + Novo
+                </button>
+
+            </a>
+
+        </div>
+
+        <div class="tabela-responsiva">
+
+            <div class="tabela-cabecalho">
+
+                <div>
+                    <strong>ID</strong>
+                </div>
+
+                <div>
+                    <strong>Nome</strong>
+                </div>
+
+                <div>
+                    <strong>Data nascimento</strong>
+                </div>
+
+                <div>
+                    <strong>Telefone</strong>
+                </div>
+
+                <div>
+                    <strong>CPF</strong>
+                </div>
+
+                <div>
+                    <strong>E-mail</strong>
+                </div>
+
+                <div>
+                    <strong>Diária</strong>
+                </div>
+
+                <div class="col-acoes">
+                    <strong>Ações</strong>
+                </div>
+
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="card-base">
+
+                    <p>
+                        Nenhum intérprete cadastrado.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                @foreach (var interprete in Model)
+                {
+                    <div class="tabela-card card-base card-interprete">
+
+                        <div class="tabela-campo campo-base"
+                             data-label="ID">
+
+                            @interprete.InterpreteId
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="Nome">
+
+                            @interprete.NomeInterprete
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="Data de nascimento">
+
+                            @interprete.DtNascimento.ToString("dd/MM/yyyy")
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="Telefone">
+
+                            @interprete.Telefone
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="CPF">
+
+                            @interprete.Cpf
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="E-mail">
+
+                            @interprete.Email
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="Diária">
+
+                                R$ @interprete.PrecoDiaria.ToString("N2")
+
+                        </div>
+
+                        <div class="tabela-campo col-acoes">
+
+                            <a asp-controller="Admin"
+                               asp-action="EditarInterprete"
+                               asp-route-id="@interprete.InterpreteId"
+                               class="acao-link acao-editar">
+
+                                Editar
+
+                            </a>
+
+                            <form asp-action="ExcluirInterprete"
+                                  asp-controller="Admin"
+                                  method="post"
+                                  onsubmit="return confirmarExclusao();">
+
+                                <input type="hidden" name="id" value="@interprete.InterpreteId" />
+
+                                <button type="submit"
+                                        class="acao-link acao-excluir">
+
+                                    Excluir
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                }
+            }
+
+        </div>
+
+    </section>
+
+</main>
+
+<script>
+
+    function confirmarExclusao() {
+        return confirm(
+            "Tem certeza que deseja excluir este pacote? Essa ação não pode ser desfeita."
+        );
+    }
+    // Script Busca
+    const inputBusca =
+        document.getElementById("input-busca");
+
+    const cards =
+        document.querySelectorAll(".card-interprete");
+
+    inputBusca.addEventListener("input", function () {
+
+        const valor =
+            this.value.toLowerCase();
+
+        cards.forEach(card => {
+
+            const textoCard =
+                card.innerText.toLowerCase();
+
+            if (textoCard.includes(valor)) {
+                card.style.display = "grid";
+            }
+            else {
+                card.style.display = "none";
+            }
+
+        });
+
+    });
+
+</script>

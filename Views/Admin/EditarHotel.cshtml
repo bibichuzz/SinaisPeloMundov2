@@ -1,0 +1,152 @@
+﻿@inject SinaisPeloMundo.Helper.ISessao Sessao
+@model ReservaHotelModel
+@{
+    ViewData["Title"] = "Admin - Editar Reserva";
+}
+
+<main class="container-revisao">
+
+    <aside class="sidebar-dados-pessoais" id="tiSidebar">
+
+        <nav class="sidebar-dados">
+
+            <a href="javascript:history.back()" class="voltar">
+                &lt; Voltar
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaInterprete">
+                Cadastro de intérprete
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaHoteis"
+               class="tela-atual">
+                Cadastro de reserva de hotel
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaPassagens">
+                Cadastro de passagem
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaPacotes">
+                Cadastros de pacotes
+            </a>
+
+            <a asp-controller="Cliente"
+               asp-action="DadosPessoais">
+                Sair
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <section class="cadastro-catalogo">
+
+        <h1>Editar reserva de hotel</h1>
+
+        <p class="sub-titulo">
+            Atualize os dados abaixo para editar esta reserva
+        </p>
+
+        <form asp-action="EditarHotel"
+              method="post"
+              class="form-dados">
+
+            <input asp-for="ReservaHotelId" type="hidden" />
+
+            <div class="campo-dados">
+                <label asp-for="NomeHotel"
+                       class="rotulo-catalogo">Nome do Hotel</label>
+
+                <input asp-for="NomeHotel"
+                       type="text"
+                       class="input-catalogo"
+                       placeholder="Digite o nome do hotel" />
+
+                <span asp-validation-for="NomeHotel"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados campo-extenso">
+                <label asp-for="EnderecoHotel"
+                       class="rotulo-catalogo">Endereço do Hotel</label>
+
+                <input asp-for="EnderecoHotel"
+                       type="text"
+                       class="input-catalogo"
+                       placeholder="Digite o endereço do hotel" />
+
+                <span asp-validation-for="EnderecoHotel"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label asp-for="DataCheckin"
+                       class="rotulo-catalogo">Data Check-In</label>
+
+                <input asp-for="DataCheckin"
+                       type="datetime-local"
+                       class="input-catalogo" />
+
+                <span asp-validation-for="DataCheckin"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label asp-for="DataCheckout"
+                       class="rotulo-catalogo">Data Check-Out</label>
+
+                <input asp-for="DataCheckout"
+                       type="datetime-local"
+                       class="input-catalogo" />
+
+                <span asp-validation-for="DataCheckout"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label asp-for="Preco"
+                       class="rotulo-catalogo">Preço</label>
+
+                <input asp-for="Preco"
+                       type="number"
+                       step="0.01"
+                       class="input-catalogo"
+                       placeholder="R$ 0,00" />
+
+                <span asp-validation-for="Preco"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="botoes-catalogo">
+
+                <a asp-controller="Admin"
+                   asp-action="ListaHoteis"
+                   class="botao-tipo3 botao-cancelar">
+
+                    Cancelar
+
+                </a>
+
+                <button class="botao-tipo3 btn-catalogo-salvar"
+                        type="submit">
+                    Salvar alterações
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

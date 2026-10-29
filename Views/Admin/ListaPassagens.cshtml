@@ -1,0 +1,285 @@
+﻿@inject SinaisPeloMundo.Helper.ISessao Sessao
+@model List<PassagemModel>
+
+@{
+    ViewData["Title"] = "Admin - Passagens";
+}
+
+<main class="container-revisao">
+
+    <aside class="sidebar-dados-pessoais" id="tiSidebar">
+
+        <nav class="sidebar-dados">
+
+            <a href="javascript:history.back()" class="voltar">
+                &lt; Voltar
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaInterprete">
+                Cadastro de intérprete
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaHoteis">
+                Cadastro de reserva de hotel
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaPassagens" class="tela-atual">
+                Cadastro de passagem
+            </a>
+
+            <a
+               asp-controller="Admin"
+               asp-action="ListaPacotes">
+
+                Cadastros de pacotes
+
+            </a>
+
+            <a asp-controller="Cliente"
+               asp-action="DadosPessoais">
+
+                Sair
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <section class="conteudo-catalogo">
+
+        @if (TempData["MensagemErro"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["MensagemErro"]
+            </div>
+        }
+
+        @if (TempData["MensagemSucesso"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["MensagemSucesso"]
+            </div>
+        }
+
+        <div class="topo-catalogo">
+
+            <div class="titulos-catalogo">
+
+                <h1>Catálogo de Cadastros de Passagens</h1>
+
+                <p class="sub-titulo">
+                    Gerencie as passagens cadastrados no sistema.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="ferramentas-catalogo">
+
+            <div class="busca-wrapper">
+
+                <span class="material-symbols-outlined icone-busca">
+                    search
+                </span>
+
+                <input type="text"
+                       id="input-busca"
+                       class="input-base"
+                       placeholder="Buscar passagem por aeroporto, transporte, tipo...">
+
+            </div>
+
+            <a asp-controller="Admin"
+               asp-action="CadastroPassagens">
+
+                <button class="botao-novo">
+                    + Novo
+                </button>
+
+            </a>
+
+        </div>
+
+        <div class="tabela-responsiva">
+
+            <div class="tabela-cabecalho">
+
+                <div>
+                    <strong>ID</strong>
+                </div>
+
+                <div>
+                    <strong>Transporte</strong>
+                </div>
+
+                <div>
+                    <strong>Tipo</strong>
+                </div>
+
+                <div>
+                    <strong>Horário partida</strong>
+                </div>
+
+                <div>
+                    <strong>Local partida</strong>
+                </div>
+
+                <div>
+                    <strong>Horário Chegada</strong>
+                </div>
+
+                <div>
+                    <strong>Local Chegada</strong>
+                </div>
+
+                <div class="col-acoes">
+                    <strong>Ações</strong>
+                </div>
+
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="card-base">
+
+                    <p>
+                        Nenhuma passagem cadastrada.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                @foreach (var passagem in Model)
+                {
+                    <div class="tabela-card card-base card-passagem">
+
+                        <div class="tabela-campo campo-base"
+                             data-label="ID">
+
+                            @passagem.PassagemId
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="Transporte">
+
+                            @passagem.Transporte
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="Tipo">
+
+                            @passagem.TipoPassagem
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="Horaário Partida">
+
+                            @passagem.HorarioPartida.ToString("dd/MM/yyyy HH:mm")
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="Local Partida">
+
+                            @passagem.LocalPartida
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="Horário Chegada">
+
+                            @passagem.HorarioChegada.ToString("dd/MM/yyyy HH:mm")
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="Local Chegada">
+
+                            @passagem.LocalChegada
+
+                        </div>
+
+                        <div class="tabela-campo col-acoes">
+
+                            <a asp-controller="Admin"
+                               asp-action="EditarPassagem"
+                               asp-route-id="@passagem.PassagemId"
+                               class="acao-link acao-editar">
+
+                                Editar
+
+                            </a>
+
+                            <form asp-action="ExcluirPassagem"
+                                  asp-controller="Admin"
+                                  method="post"
+                                  onsubmit="return confirmarExclusao();">
+
+                                <input type="hidden" name="id" value="@passagem.PassagemId" />
+
+                                <button type="submit"
+                                        class="acao-link acao-excluir">
+
+                                    Excluir
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                }
+            }
+
+        </div>
+
+    </section>
+
+</main>
+
+<script>
+
+    function confirmarExclusao() {
+        return confirm(
+            "Tem certeza que deseja excluir este pacote? Essa ação não pode ser desfeita."
+        );
+    }
+     // Script Busca
+    const inputBusca =
+        document.getElementById("input-busca");
+
+    const cards =
+        document.querySelectorAll(".card-passagem");
+
+    inputBusca.addEventListener("input", function () {
+
+        const valor =
+            this.value.toLowerCase();
+
+        cards.forEach(card => {
+
+            const textoCard =
+                card.innerText.toLowerCase();
+
+            if (textoCard.includes(valor)) {
+                card.style.display = "grid";
+            }
+            else {
+                card.style.display = "none";
+            }
+
+        });
+
+    });
+
+</script>

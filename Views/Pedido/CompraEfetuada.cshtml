@@ -1,0 +1,56 @@
+﻿@model PedidoModel
+@inject SinaisPeloMundo.Helper.ISessao Sessao
+@{
+    ViewData["Title"] = "Compra efetuada";
+}
+<main class="container-dados">
+
+    <aside class="sidebar-dados-pessoais" id="tiSidebar">
+        <nav class="sidebar-dados">
+            <a href="javascript:history.back()" class="voltar">&lt; Voltar</a>
+        </nav>
+    </aside>
+
+    <section class="compra-de-pacote">
+
+        <div class="comprar-pacote">
+            <div class="confirmacao-compra">
+                <div id="confirmacao-visual">
+                    <span class="material-symbols-outlined">check</span>
+                </div>
+                <h2>Compra concluída com sucesso!</h2>
+                <p>Sua compra foi confirmada e será processada em breve</p>
+            </div>
+
+            <div class="info-compra">
+
+                <div class="info-item">
+                    <div class="icon-box">
+                        <span class="material-symbols-outlined">calendar_month</span>
+                    </div>
+                    <div class="text-group">
+                        <strong>Data da compra</strong>
+                        <span>
+                            @Model.DataPagamento?.ToString("dd/MM/yyyy - HH:mm")
+                        </span>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="icon-box">
+                        <span class="material-symbols-outlined">badge</span>
+                    </div>
+                    <div class="text-group">
+                        <strong>ID do pedido</strong>
+                        <span>
+                            @Model.PedidoId.ToString("D3")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <a asp-controller="Home" asp-action="Index" class="botao-tipo4">IR PARA A PÁGINA INICIAL</a>
+        </div>
+    </section>
+
+</main>

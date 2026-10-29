@@ -1,0 +1,43 @@
+﻿@using SinaisPeloMundo.ViewModel
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="cadastro-login">
+    <main class="container-cadastro" id="tela-login">
+        <section class="lado-esquerdo">
+            <div class="logo-cadastro">
+                <img class="logo-tipo-light logo-tipo" src="https://github.com/guimendz/Site-de-Turismo/blob/main/Assets/img/Logo-tipo.jpg?raw=true" alt="Logo">
+                <img class="logo-tipo-dark logo-tipo" src="https://i.imgur.com/pyks6kz.png" alt="Logo">
+            </div>
+
+            <h2>Novo por aqui?</h2>
+            <p>Crie sua conta agora mesmo</p>
+            <a class="botao-tipo1 btn-azul" asp-controller="Cliente" asp-action="Cadastro">Cadastrar</a>
+        </section>
+
+        <section class="lado-direito">
+            <h2 id="acesse-conta">Acesse sua conta</h2>
+
+            <form asp-controller="Login" asp-action="Logar" class="form-cadastro" method="post">
+                <div class="campo-form">
+                    <label class="rotulo-form" for="email">Email</label>
+                    <input id="email" asp-for="Email" type="email" placeholder="Email" required>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="campo-form">
+                    <label class="rotulo-form" for="senha">Senha</label>
+                    <input id="senha" asp-for="Senha" type="password" placeholder="Senha" required>
+                    <span asp-validation-for="Senha" class="text-danger"></span>
+                </div>
+
+                <a id="esqueci-senha" href="#">Esqueci a senha?</a>
+
+                <button id="botao-entrar" class="botao-tipo1 btn-azul" type="submit">Entrar</button>
+            </form>
+
+        </section>
+    </main>
+</div>

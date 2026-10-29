@@ -1,0 +1,286 @@
+﻿@inject SinaisPeloMundo.Helper.ISessao Sessao
+@model List<PedidoModel>
+@{
+    ViewData["Title"] = "Histórico de Pedidos";
+}
+    <main class="container-dados">
+
+        <aside class="sidebar-dados-pessoais">
+
+            <nav class="sidebar-dados">
+                <a asp-controller="Home" asp-action="Index">&lt; Voltar</a>
+                <a asp-controller="Cliente" asp-action="DadosPessoais">Dados Pessoais</a>
+                <a asp-controller="Cliente" asp-action="HistoricoPedidos">Histórico</a>
+            @{
+                var clienteLogado = Sessao.BuscarSessao();
+            }
+
+            @if (clienteLogado != null && clienteLogado.Admin)
+            {
+                <a asp-controller="Admin"
+                   asp-action="ListaPacotes">
+                    Painel Administrativo
+                </a>
+            }
+                <a asp-controller="Login" asp-action="Sair">Sair</a>
+            </nav>
+        </aside>
+
+
+        <div class="lista-historico">
+        @if(!Model.Any()){
+            <p>Você ainda não tem nenhum pedido.</p>
+        }
+
+        else {
+                @foreach (var pedido in Model)
+                {
+                    <div class="card-historico @(pedido.Cancelado ? "card-cancelado" : "")">
+
+                        <div class="info-historico">
+
+                            <h2>@pedido.Pacote.Destino</h2>
+                            @if (pedido.Cancelado)
+                            {
+                                <span class="status-cancelado">
+                                    Pedido Cancelado
+                                </span>
+                            }
+
+                            <div class="grid-info">
+
+                                <p>
+                                    <strong>Destino</strong>
+                                    @pedido.Pacote.Passagem.LocalChegada
+                                </p>
+
+                                <p>
+                                    <strong>Data da viagem</strong>
+                                    @pedido.Pacote.Passagem.HorarioPartida.ToString("dd/MM/yyyy")
+                                    até
+                                    @pedido.Pacote.Passagem.HorarioChegada.ToString("dd/MM/yyyy")
+                                </p>
+
+                                <p>
+                                    <strong>Valor pago</strong>
+                                    @pedido.Preco.ToString("C")
+                                </p>
+
+                                <p>
+                                    <strong>Hotel</strong>
+                                    @pedido.Pacote.ReservaHotel.NomeHotel
+                                </p>
+
+                                <p>
+                                    <strong>Intérprete</strong>
+                                    @pedido.Pacote.Interprete.NomeInterprete
+                                </p>
+
+                            </div>
+
+                            <button type="button"
+                                    class="detalhes"
+                                    onclick="toggleDetalhes(@pedido.PedidoId)">
+                                Mostrar detalhes
+                            </button>
+
+                            <div id="detalhes-@pedido.PedidoId"
+                                 class="painel-detalhes"
+                                 style="display:none;">
+
+                                <h3>Detalhes do Pedido</h3>
+
+                                <hr>
+
+                                <h5>Passagem</h5>
+
+                                <p>
+                                    <strong>Destino:</strong>
+                                    @pedido.Pacote.Passagem.LocalChegada
+                                </p>
+
+                                <p>
+                                    <strong>Data e horário de chegada:</strong>
+                                    @pedido.Pacote.Passagem.HorarioChegada.ToString("dd/MM/yyyy HH:mm")
+                                </p>
+
+                                <p>
+                                    <strong>Partida:</strong>
+                                    @pedido.Pacote.Passagem.LocalPartida
+                                </p>
+
+                                <p>
+                                    <strong>Data e horário de partida:</strong>
+                                    @pedido.Pacote.Passagem.HorarioPartida.ToString("dd/MM/yyyy HH:mm")
+                                </p>
+
+                                <p>
+                                    <strong>Transporte:</strong>
+                                    @pedido.Pacote.Passagem.Transporte
+                                </p>
+
+                                <p>
+                                    <strong>Tipo da passagem:</strong>
+                                    @pedido.Pacote.Passagem.TipoPassagem
+                                </p>
+
+                                <p>
+                                    <strong>Placa do transporte:</strong>
+                                    @pedido.Pacote.Passagem.PlacaTransporte
+                                </p>
+
+                                <p>
+                                    <strong>Poltrona:</strong>
+                                    @pedido.Pacote.Passagem.Poltrona
+                                </p>
+
+                                <hr>
+
+                                <h5>Hotel</h5>
+
+                                <p>
+                                    <strong>Nome do hotel:</strong>
+                                    @pedido.Pacote.ReservaHotel.NomeHotel
+                                </p>
+
+                                <p>
+                                    <strong>Endereço:</strong>
+                                    @pedido.Pacote.ReservaHotel.EnderecoHotel
+                                </p>
+
+                                <p>
+                                    <strong>Check-in:</strong>
+                                    @pedido.Pacote.ReservaHotel.DataCheckin.ToString("dd/MM/yyyy HH:mm")
+                                </p>
+
+                                <p>
+                                    <strong>Check-out:</strong>
+                                    @pedido.Pacote.ReservaHotel.DataCheckout.ToString("dd/MM/yyyy HH:mm")
+                                </p>
+
+                                <hr>
+
+                                <h5>Intérprete</h5>
+
+                                <p>
+                                    <strong>Nome:</strong>
+                                    @pedido.Pacote.Interprete.NomeInterprete
+                                </p>
+
+                                <p>
+                                    <strong>Email:</strong>
+                                    @pedido.Pacote.Interprete.Email
+                                </p>
+
+                                <p>
+                                    <strong>Telefone:</strong>
+                                    @pedido.Pacote.Interprete.Telefone
+                                </p>
+
+                                <hr>
+
+                                <h5>Pacote</h5>
+
+                                <p>
+                                    <strong>Valor do pacote:</strong>
+                                    @pedido.Pacote.Preco.ToString("C")
+                                </p>
+
+                                <hr>
+
+                                <h5>Pedido</h5>
+
+                            <p>
+                                <strong>Pagamento efetuado:</strong>
+
+                                @if (pedido.DataPagamento.HasValue)
+                                {
+                                    <span>Sim</span>
+                                }
+                                else if (!pedido.DataPagamento.HasValue && pedido.Cancelado == true)
+                                {
+                                    <span>Não</span>
+                                }
+                                else
+                                {
+                                    <span>
+                                        Não -
+                                        <strong><a asp-controller="Pedido"
+                                           asp-action="Pagamento"
+                                           asp-route-pedidoId="@pedido.PedidoId">
+                                            Clique aqui para pagar
+                                            </a>
+                                        </strong>
+                                    </span>
+                                }
+                            </p>
+
+                                <p>
+                                    <strong>Cancelado:</strong>
+                                    @(pedido.Cancelado ? "Sim" : "Não")
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="acoes-historico">
+
+                            <button class ="botao-tipo3 botao-gerar">
+                                <a asp-controller="Pedido"
+                                   asp-action="GerarNotaFiscal"
+                                   asp-route-pedidoId="@pedido.PedidoId">
+                                    Gerar Nota Fiscal
+                                </a>
+                            </button>
+                            
+
+                            @if (pedido.Cancelado)
+                            {
+                                <button class="botao-cancelado" disabled>
+                                    Pedido cancelado
+                                </button>
+                            }
+                            else
+                            {
+                                <form asp-controller="Pedido"
+                                      asp-action="CancelarPedido"
+                                      method="post"
+                                      onsubmit="return confirmarCancelamento()">
+
+                                    <input type="hidden" name="pedidoId" value="@pedido.PedidoId" />
+
+                                    <button type="submit"
+                                            class="botao-tipo3 botao-cancelar">
+                                        Cancelar pedido
+                                    </button>
+                                </form>
+                            }
+
+                        </div>
+
+                    </div>
+                }
+        }
+        </div>
+        </div>
+    </main>
+            <script>
+                function toggleDetalhes(id) {
+
+                    const painel = document.getElementById("detalhes-" + id);
+
+                    if (painel.style.display === "none") {
+                        painel.style.display = "block";
+                    }
+                    else {
+                        painel.style.display = "none";
+                    }
+                }
+        function confirmarCancelamento() {
+
+            return confirm(
+                "Tem certeza que deseja cancelar este pedido?"
+            );
+        }
+            </script>

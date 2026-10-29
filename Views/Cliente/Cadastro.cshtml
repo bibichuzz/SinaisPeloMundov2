@@ -1,0 +1,138 @@
+﻿@model ClienteModel
+@{
+    ViewData["Title"] = "Cadastro";
+}
+
+    <div class="cadastro-login">
+    <main class="container-cadastro">
+        <section class="lado-esquerdo">
+            <div class="logo">
+                <img class="logo-tipo-light logo-tipo" src="https://github.com/guimendz/Site-de-Turismo/blob/main/Assets/img/Logo-tipo.jpg?raw=true" alt="Logo">
+                <img class="logo-tipo-dark logo-tipo" src="https://i.imgur.com/pyks6kz.png" alt="Logo">
+            </div>
+            
+            <h2>Bem vindo de volta</h2>
+            <p>Acesse sua conta agora mesmo</p>
+            <a id="botao-entrar" class="botao-tipo1 btn-azul" asp-controller="Login" asp-action="Login">Entrar</a>
+        </section>
+
+        <section class="lado-direito">
+            <h2>Crie sua conta</h2>
+            
+            <form class="form-cadastro" asp-controller="Cliente" asp-action="Criar" method="post">
+                <div class="campo-form">
+                    <label class="rotulo-form" for="nome">Nome</label>
+                    <input id="nome" asp-for="Nome" type="text" placeholder="Nome" required>
+                </div>
+
+                <div class="campo-form">
+                    <label class="rotulo-form" for="email">Email</label>
+                    <input id="email" asp-for="Email" type="email" placeholder="Email" required>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="campo-form">
+                    <label class="rotulo-form" for="senha">Senha</label>
+                    <input id="senha" asp-for="Senha" type="password" placeholder="Senha" required>
+                </div>
+
+                <div class="campo-form">
+                    <label class="rotulo-form" for="cpf">CPF</label>
+                    <input id="cpf" asp-for="Cpf" type="text" placeholder="CPF" required>
+                    <span asp-validation-for="Cpf" class="text-danger"></span>
+                </div>
+
+                <div class="campo-form">
+                    <label class="rotulo-form" for="nascimento">Data de Nascimento</label>
+                    <input id="nascimento" asp-for="DtNascimento" type="date" placeholder="Data de Nascimento" required>
+                </div>
+
+                <div class="campo-form">
+                    <label class="rotulo-form" for="telefone">Telefone</label>
+                    <input id="telefone" asp-for="Telefone" type="tel" placeholder="Telefone" required>
+                    <span asp-validation-for="Telefone" class="text-danger"></span>
+                </div>
+
+                 <div class="campo-form">
+                    <label class="rotulo-form" for="Cep">CEP</label>
+                    <input id="cep" asp-for="Cep" type="text" placeholder="CEP" required maxlength="8">
+                    <span asp-validation-for="Cep" class="text-danger"></span>
+                </div>
+
+                <div class="campo-form">
+                    <label class="rotulo-form" for="Cidade">Cidade</label>
+                    <input id="cidade" asp-for="Cidade" type="text" placeholder="Cidade" required readonly maxlength="60">
+                    <span asp-validation-for="Cidade" class="text-danger"></span>
+                </div>
+
+                <div class="campo-form">
+                    <label class="rotulo-form" for="Uf">UF</label>
+                    <input id="uf" asp-for="Uf" type="text" placeholder="UF" required readonly maxlength="2">
+                    <span asp-validation-for="Uf" class="text-danger"></span>
+                </div>
+
+                <div class="campo-form">
+                    <label class="rotulo-form" for="Bairro">Bairro</label>
+                    <input id="bairro" asp-for="Bairro" type="text" placeholder="Bairro" required readonly maxlength="60">
+                    <span asp-validation-for="Bairro" class="text-danger"></span>
+                </div>
+
+                <div class="campo-form">
+                    <label class="rotulo-form" for="Numero">Número</label>
+                    <input id="numero" asp-for="Numero" type="text" placeholder="Número" required maxlength="15">
+                    <span asp-validation-for="Numero" class="text-danger"></span>
+                </div>
+
+                <div class="campo-form">
+                    <label class="rotulo-form" for="Complemento">Complemento</label>
+                    <input id="complemento" asp-for="Complemento" type="text" placeholder="Complemento" maxlength="60">
+                    <span asp-validation-for="Complemento" class="text-danger"></span>
+                </div>
+
+                <button class="botao-tipo1 btn-azul" type="submit">Cadastrar</button>
+            </form>
+        </section>
+    </main>
+    </div>
+
+    <script>
+    document.getElementById("cep").addEventListener("blur", function () {
+
+        let cep = this.value.replace(/\D/g, "");
+        let mensagemCep = document.querySelector("[data-valmsg-for='Cep']");
+
+        // Limpa a mensagem anterior
+        mensagemCep.textContent = "";
+
+        if (cep.length !== 8) {
+            mensagemCep.textContent = "CEP deve conter 8 números.";
+            return;
+        }
+
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+        .then(dados => {
+
+            if (dados.erro) {
+                mensagemCep.textContent = "CEP não encontrado.";
+
+                // Limpa os campos preenchidos anteriormente
+                document.getElementById("bairro").value = "";
+                document.getElementById("cidade").value = "";
+                document.getElementById("uf").value = "";
+
+                return;
+            }
+
+            document.getElementById("bairro").value = dados.bairro;
+            document.getElementById("cidade").value = dados.localidade;
+            document.getElementById("uf").value = dados.uf;
+
+            mensagemCep.textContent = "";
+        })
+        .catch(error => {
+            console.error("Erro ao consultar o ViaCEP:", error);
+            mensagemCep.textContent = "Não foi possível consultar o CEP.";
+        });
+    });
+    </script>

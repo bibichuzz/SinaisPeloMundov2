@@ -1,0 +1,339 @@
+﻿@inject SinaisPeloMundo.Helper.ISessao Sessao
+@model PacoteModel
+@{
+    ViewData["Title"] = "Revisar compra";
+}
+
+<main class="container-revisao">
+
+    <aside class="sidebar-dados-pessoais" id="tiSidebar">
+        <nav class="sidebar-dados">
+            <a href="javascript:history.back()" class="voltar">&lt; Voltar</a>
+
+            <a asp-controller="Pacote"
+               asp-action="DetalhesPacote"
+               asp-route-id="@Model.PacoteId">
+                Detalhes do pacote
+            </a>
+
+            <a class="tela-atual">
+                Revisar Compra
+            </a>
+        </nav>
+    </aside>
+
+    <section class="revisao-de-pacote">
+        <h1>Revisar compra</h1>
+        <p class="sub-titulo">Confira os detalhes da sua compra antes de continuar.</p>
+
+        <div class="checkout-wrapper">
+
+            <div class="detalhes-coluna">
+
+                <article class="card-item-principal">
+
+                    <div class="img-container">
+                        <img src="@Model.UrlImagem" alt="Imagem do pacote">
+                    </div>
+
+                    <div class="item-info-header">
+                        <h2>@Model.Destino</h2>
+
+                        <p>
+                            Pacote completo com hotel, passagem aérea e intérprete
+                            durante toda a viagem.
+                        </p>
+                    </div>
+
+                </article>
+
+                <div class="servicos-lista">
+
+                    <!-- HOTEL -->
+                    <div class="servico-item">
+
+                        <span class="material-symbols-outlined icon-box">
+                            hotel
+                        </span>
+
+                        <div class="servico-txt">
+
+                            <h3>Hotel</h3>
+
+                            <p>@Model.ReservaHotel.NomeHotel</p>
+
+                            <address>
+                                <span class="material-symbols-outlined inline-icon">
+                                    location_on
+                                </span>
+
+                                @Model.ReservaHotel.EnderecoHotel
+                            </address>
+
+                            <p>
+                                <span class="material-symbols-outlined inline-icon">
+                                    calendar_month
+                                </span>
+
+                                Check-In:
+                                @Model.ReservaHotel.DataCheckin.ToString("dd/MM/yyyy HH:mm")
+
+                                · Check-Out:
+                                @Model.ReservaHotel.DataCheckout.ToString("dd/MM/yyyy HH:mm")
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- PASSAGEM -->
+                    <div class="servico-item">
+
+                        <span class="material-symbols-outlined icon-box">
+                            flight
+                        </span>
+
+                        <div class="servico-txt">
+
+                            <h3>Passagem aérea</h3>
+
+                            <p>
+                                @Model.Passagem.LocalPartida
+                                ➔
+                                @Model.Passagem.LocalChegada
+                            </p>
+
+                            <p>
+                                <span class="material-symbols-outlined inline-icon">
+                                    calendar_month
+                                </span>
+
+                                Ida:
+                                @Model.Passagem.HorarioPartida.ToString("dd/MM/yyyy HH:mm")
+
+                                · Chegada:
+                                @Model.Passagem.HorarioChegada.ToString("dd/MM/yyyy HH:mm")
+                            </p>
+
+                            <p>
+                                <span class="material-symbols-outlined inline-icon">
+                                    directions_car
+                                </span>
+
+                                @Model.Passagem.Transporte,
+                                @Model.Passagem.TipoPassagem
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- INTERPRETE -->
+                    <div class="servico-item">
+
+                        <span class="material-symbols-outlined icon-box">
+                            person
+                        </span>
+
+                        <div class="servico-txt">
+
+                            <h3>Intérprete</h3>
+
+                            <p>@Model.Interprete.NomeInterprete</p>
+
+                            <p>
+                                <span class="material-symbols-outlined inline-icon">
+                                    call
+                                </span>
+
+                                @Model.Interprete.Telefone
+                            </p>
+
+                            <p>
+                                <span class="material-symbols-outlined inline-icon">
+                                    email
+                                </span>
+
+                                @Model.Interprete.Email
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RESUMO -->
+            <aside class="resumo-coluna">
+
+                <div class="resumo-card">
+
+                    <h3>Resumo da compra</h3>
+
+                    <div class="preco-individual">
+
+                        <p>Preço por pessoa</p>
+
+                        <p class="valor-foco">
+                            R$ @Model.Preco.ToString("N2")
+                        </p>
+
+                    </div>
+
+                    <div class="itens-inclusos">
+
+                        <h4>O que está incluído</h4>
+
+                        <ul>
+
+                            <li>
+                                <span class="material-symbols-outlined">
+                                    check_circle
+                                </span>
+
+                                Hotel
+                            </li>
+
+                            <li>
+                                <span class="material-symbols-outlined">
+                                    check_circle
+                                </span>
+
+                                Passagem ida e volta
+                            </li>
+
+                            <li>
+                                <span class="material-symbols-outlined">
+                                    check_circle
+                                </span>
+
+                                Intérprete durante todo o período
+                            </li>
+
+                            <li>
+                                <span class="material-symbols-outlined">
+                                    check_circle
+                                </span>
+
+                                Suporte 24h
+                            </li>
+
+                            <li>
+                                <span class="material-symbols-outlined">
+                                    check_circle
+                                </span>
+
+                                Seguro viagem
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                    <div class="total-container">
+
+                        <span>Total</span>
+
+                        <span class="total-valor">
+                            R$ @Model.Preco.ToString("N2")
+                        </span>
+
+                    </div>
+
+                    <form method="post"
+                          asp-controller="Pedido"
+                          asp-action="ConfirmarPagamento">
+
+                        <input type="hidden"
+                               name="PacoteId"
+                               value="@Model.PacoteId" />
+
+                        <div class="campo-dados">
+
+                            <label for="FormaPagamento">
+                                Forma de pagamento
+                            </label>
+
+                            <select id="FormaPagamento"
+                                    name="FormaPagamento">
+
+                                <option value="Debito">Débito</option>
+                                <option value="Credito">Crédito</option>
+                                <option value="Pix">Pix</option>
+
+                            </select>
+
+                            <label for="Parcelas">
+                                Parcelas
+                            </label>
+
+                            <select id="Parcelas"
+                                    name="Parcelas"
+                                    disabled>
+
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+
+                            </select>
+
+                        </div>
+
+                        <button type="submit"
+                                class="botao-tipo4">
+
+                            IR PARA PAGAMENTO
+
+                        </button>
+
+                    </form>
+
+                    
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </section>
+
+</main>
+<script>
+
+    const formaPagamento =
+        document.getElementById("FormaPagamento");
+
+    const parcelas =
+        document.getElementById("Parcelas");
+
+    function atualizarParcelas() {
+
+        if (formaPagamento.value === "Credito") {
+
+            parcelas.disabled = false;
+
+        }
+        else {
+
+            parcelas.disabled = true;
+
+            parcelas.value = "1";
+        }
+    }
+
+    formaPagamento.addEventListener(
+        "change",
+        atualizarParcelas
+    );
+
+    atualizarParcelas();
+
+</script>

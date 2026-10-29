@@ -1,0 +1,277 @@
+﻿@inject SinaisPeloMundo.Helper.ISessao Sessao
+@model List<PacoteModel>
+
+@{
+    ViewData["Title"] = "Admin - Pacotes";
+}
+
+<main class="container-revisao">
+
+    <aside class="sidebar-dados-pessoais" id="tiSidebar">
+
+        <nav class="sidebar-dados">
+
+            <a href="javascript:history.back()" class="voltar">
+                &lt; Voltar
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaInterprete">
+                Cadastro de intérprete
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaHoteis">
+                Cadastro de reserva de hotel
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaPassagens">
+                Cadastro de passagem
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaPacotes" class="tela-atual">
+
+                Cadastros de pacotes
+
+            </a>
+
+            <a asp-controller="Cliente"
+               asp-action="DadosPessoais">
+
+                Sair
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <section class="conteudo-catalogo">
+
+        <div class="topo-catalogo">
+
+            <div class="titulos-catalogo">
+
+                <h1>Catálogo de Cadastros de Pacotes</h1>
+
+                <p class="sub-titulo">
+                    Gerencie os pacotes cadastrados no sistema.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="ferramentas-catalogo">
+
+            <div class="busca-wrapper">
+
+                <span class="material-symbols-outlined icone-busca">
+                    search
+                </span>
+
+                <input type="text"
+                       class="input-base"
+                       id="input-busca"
+                       placeholder="Buscar pacote por ID de passagem, reserva de hotel, intérprete ou destino...">
+
+            </div>
+
+            <a asp-controller="Admin"
+               asp-action="CadastroPacotes">
+
+                <button class="botao-novo">
+                    + Novo
+                </button>
+
+            </a>
+
+        </div>
+
+        <div class="tabela-responsiva">
+
+            <div class="tabela-cabecalho">
+
+                <div>
+                    <strong>ID</strong>
+                </div>
+
+                <div>
+                    <strong>ID Passagem</strong>
+                </div>
+
+                <div>
+                    <strong>ID reserva hotel</strong>
+                </div>
+
+                <div>
+                    <strong>ID Intérprete</strong>
+                </div>
+
+                <div>
+                    <strong>Preço</strong>
+                </div>
+
+                <div>
+                    <strong>Destino</strong>
+                </div>
+
+                <div>
+                    <strong>URL da imagem</strong>
+                </div>
+
+                <div class="col-acoes">
+                    <strong>Ações</strong>
+                </div>
+
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="card-base">
+
+                    <p>
+                        Nenhum pacote cadastrado.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                @foreach (var pacote in Model)
+                {
+                    <div class="tabela-card card-base card-pacotes">
+
+                        <div class="tabela-campo campo-base"
+                             data-label="ID">
+
+                            @pacote.PacoteId
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="ID Passagem">
+
+                            @pacote.PassagemId
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="ID reserva hotel">
+
+                            @pacote.ReservaHotelId
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="ID Intérprete">
+
+                            @pacote.InterpreteId
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="Preço">
+
+                            R$ @pacote.Preco.ToString("N2")
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="Destino">
+
+                            @pacote.Destino
+
+                        </div>
+
+                        <div class="tabela-campo campo-base col-url"
+                             data-label="URL da imagem">
+
+                            <a href="@pacote.UrlImagem"
+                               target="_blank">
+
+                                @(pacote.UrlImagem.Length >= 15
+                                    ? pacote.UrlImagem.Substring(0, 15) + "..."
+                                    : pacote.UrlImagem.ToUpper())
+
+                            </a>
+
+                        </div>
+
+                        <div class="tabela-campo col-acoes">
+
+                            <a asp-controller="Admin"
+                               asp-action="EditarPacote"
+                               asp-route-id="@pacote.PacoteId"
+                               class="acao-link acao-editar">
+
+                                Editar
+
+                            </a>
+
+                            <form asp-action="ExcluirPacote"
+                                  asp-controller="Admin"
+                                  method="post"
+                                  onsubmit="return confirmarExclusao();">
+
+                                <input type="hidden" name="id" value="@pacote.PacoteId" />
+
+                                <button type="submit"
+                                        class="acao-link acao-excluir">
+
+                                    Excluir
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                }
+            }
+
+        </div>
+
+    </section>
+
+</main>
+
+<script>
+
+    function confirmarExclusao() {
+        return confirm(
+            "Tem certeza que deseja excluir este pacote? Essa ação não pode ser desfeita."
+        );
+    }
+    // Script Busca
+    const inputBusca =
+        document.getElementById("input-busca");
+
+    const cards =
+        document.querySelectorAll(".card-pacotes");
+
+    inputBusca.addEventListener("input", function () {
+
+        const valor =
+            this.value.toLowerCase();
+
+        cards.forEach(card => {
+
+            const textoCard =
+                card.innerText.toLowerCase();
+
+            if (textoCard.includes(valor)) {
+                card.style.display = "grid";
+            }
+            else {
+                card.style.display = "none";
+            }
+
+        });
+
+    });
+
+</script>

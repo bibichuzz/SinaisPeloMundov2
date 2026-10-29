@@ -1,0 +1,87 @@
+﻿@model PedidoModel
+@inject SinaisPeloMundo.Helper.ISessao Sessao
+@{
+    ViewData["Title"] = "Confirmar pagamento";
+}
+
+<main class="container-dados">
+
+    <aside class="sidebar-dados-pessoais" id="tiSidebar">
+        <nav class="sidebar-dados">
+            <a href="javascript:history.back()" class="voltar">&lt; Voltar</a>
+        </nav>
+    </aside>
+
+    <section class="compra-de-pacote">
+        <h1>Confirmação de compra</h1>
+        <p>Leia o QR Code abaixo para confirmar a sua compra</p>
+
+        <div class="comprar-pacote">
+            <div class="conteudo-compra">
+                <h2>Compra realizada com sucesso</h2>
+                <p class="sub-titulo">Leia este QR Code para confirmar a compra</p>
+                <div id="qr-code-compra">
+                    <img src="@ViewBag.QrCode" alt="QR Code">
+                </div>
+                <p>
+                    Escaneie com o app do seu banco para concluir o pagamento,
+                    ou clique
+
+                    <button type="submit"
+                            form="formPagamento">
+                        <strong>aqui</strong>
+                    </button>
+
+                    para continuar.
+                </p>
+
+                <form id="formPagamento"
+                      method="post"
+                      asp-controller="Pedido"
+                      asp-action="ConfirmarCompraEfetuada">
+
+                    <input type="hidden" name="pedidoId" value="@Model.PedidoId" />
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+@section Scripts {
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+
+    <!-- Script QR Code -->
+    <script>
+
+        const pedidoId = "@Model.PedidoId";
+
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/pagamentoHub")
+            .build();
+
+        connection.start()
+            .then(() => {
+                console.log("Conectado no SignalR");
+
+                return connection.invoke("EntrarPedido", pedidoId);
+            })
+            .then(() => {
+                console.log("Entrou no grupo:", pedidoId);
+            })
+            .catch(err => console.error(err));
+
+        connection.on("PagamentoConfirmado", () => {
+
+            console.log("Pagamento confirmado pelo servidor");
+
+            window.location.href =
+                `/Pedido/CompraEfetuada?pedidoId=${pedidoId}`;
+
+        });
+
+    </script>
+
+}

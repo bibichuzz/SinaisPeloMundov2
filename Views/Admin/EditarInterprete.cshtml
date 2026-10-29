@@ -1,0 +1,187 @@
+﻿@inject SinaisPeloMundo.Helper.ISessao Sessao
+@model InterpreteModel
+
+@{
+    ViewData["Title"] = "Admin - Editar Intérprete";
+}
+
+<main class="container-revisao">
+
+    <aside class="sidebar-dados-pessoais" id="tiSidebar">
+
+        <nav class="sidebar-dados">
+
+            <a href="javascript:history.back()" class="voltar">
+                &lt; Voltar
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaInterprete"
+               class="tela-atual">
+                Cadastro de intérprete
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaHoteis">
+                Cadastro de reserva de hotel
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaPassagens">
+                Cadastro de passagem
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaPacotes">
+
+                Cadastros de pacotes
+
+            </a>
+
+            <a asp-controller="Cliente"
+               asp-action="DadosPessoais">
+
+                Sair
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <section class="cadastro-catalogo">
+
+        <h1>Editar intérprete</h1>
+
+        <p class="sub-titulo">
+            Atualize os dados abaixo para editar este intérprete
+        </p>
+
+        <form asp-action="EditarInterprete"
+              method="post"
+              class="form-dados">
+
+            <input asp-for="InterpreteId" type="hidden" />
+
+            <div class="campo-dados">
+                <label asp-for="NomeInterprete"
+                       class="rotulo-catalogo">
+                    Nome do Intérprete
+                </label>
+
+                <input asp-for="NomeInterprete"
+                       type="text"
+                       class="input-catalogo"
+                       placeholder="Digite o nome do intérprete" />
+
+                <span asp-validation-for="NomeInterprete"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label asp-for="DtNascimento"
+                       class="rotulo-catalogo">
+                    Data de Nascimento
+                </label>
+
+                <input asp-for="DtNascimento"
+                       type="date"
+                       class="input-catalogo" />
+
+                <span asp-validation-for="DtNascimento"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label asp-for="Telefone"
+                       class="rotulo-catalogo">
+                    Telefone
+                </label>
+
+                <input asp-for="Telefone"
+                       type="text"
+                       maxlength="11"
+                       class="input-catalogo"
+                       placeholder="Digite o telefone" />
+
+                <span asp-validation-for="Telefone"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label asp-for="Cpf"
+                       class="rotulo-catalogo">
+                    CPF
+                </label>
+
+                <input asp-for="Cpf"
+                       type="text"
+                       maxlength="11"
+                       class="input-catalogo"
+                       placeholder="Digite o CPF" />
+
+                <span asp-validation-for="Cpf"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados campo-extenso">
+                <label asp-for="Email"
+                       class="rotulo-catalogo">
+                    E-mail
+                </label>
+
+                <input asp-for="Email"
+                       type="email"
+                       class="input-catalogo"
+                       placeholder="Digite o e-mail" />
+
+                <span asp-validation-for="Email"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="campo-dados">
+                <label asp-for="PrecoDiaria"
+                       class="rotulo-catalogo">
+                    Preço da Diária
+                </label>
+
+                <input asp-for="PrecoDiaria"
+                       type="number"
+                       step="0.01"
+                       class="input-catalogo"
+                       placeholder="R$ 0,00" />
+
+                <span asp-validation-for="PrecoDiaria"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="botoes-catalogo">
+
+                <a asp-controller="Admin"
+                   asp-action="ListaInterprete"
+                   class="botao-tipo3 botao-cancelar">
+
+                    Cancelar
+
+                </a>
+
+                <button class="botao-tipo3 btn-catalogo-salvar"
+                        type="submit">
+
+                    Salvar Alterações
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

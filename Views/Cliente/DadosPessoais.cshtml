@@ -1,0 +1,106 @@
+﻿@inject SinaisPeloMundo.Helper.ISessao Sessao
+@model ClienteModel
+@{
+    ViewData["Title"] = "Dados pessoais";
+}
+<main class="container-dados">
+
+    <aside class="sidebar-dados-pessoais">
+
+        <nav class="sidebar-dados">
+            <a asp-controller="Home" asp-action="Index">&lt; Voltar</a>
+            <a asp-controller="Cliente" asp-action="DadosPessoais">Dados Pessoais</a>
+            <a asp-controller="Cliente" asp-action="HistoricoPedidos">Histórico</a>
+            @if (Model.Admin)
+            {
+                <a asp-controller="Admin" asp-action="ListaPacotes">
+                    Painel Administrativo
+                </a>
+            }
+            <a asp-controller="Login" asp-action="Sair">Sair</a>
+        </nav>
+    </aside>
+
+    <section class="dados-pessoais">
+        <h1>Dados Pessoais</h1>
+        <p>Verifique ou altere seus dados</p>
+
+        <form class="form-dados">
+            <div class="campo-dados">
+                <label for="nome">Nome</label>
+                <input id="nome" asp-for="Nome" type="text" disabled>
+            </div>
+
+            <div class="campo-dados">
+                <label for="email">Email</label>
+                <input id="email" asp-for="Email" type="email" disabled>
+            </div>
+
+            <div class="campo-dados">
+                <label for="senha">Senha</label>
+                <input id="senha" asp-for="Senha" type="password" disabled>
+            </div>
+
+            <div class="campo-dados">
+                <label for="cpf">CPF</label>
+                <input id="cpf" asp-for="Cpf" type="text" disabled>
+            </div>
+
+            <div class="campo-dados">
+                <label for="nascimento">Data de Nascimento</label>
+                <input id="nascimento" asp-for="DtNascimento" type="date" disabled>
+            </div>
+
+            <div class="campo-dados">
+                <label for="telefone">Telefone</label>
+                <input id="telefone" asp-for="Telefone" type="tel" disabled>
+            </div>
+
+            <div class="campo-dados">
+                <label for="cep">CEP</label>
+                <input id="cep" asp-for="Cep" type="text" disabled>
+            </div>
+
+            <div class="campo-dados">
+                <label for="cidade">Cidade</label>
+                <input id="cidade" asp-for="Cidade" type="text" disabled>
+            </div>
+
+            <div class="campo-dados">
+                <label for="uf">UF</label>
+                <input id="uf" asp-for="Uf" type="text" disabled>
+            </div>
+
+            <div class="campo-dados">
+                <label for="bairro">Bairro</label>
+                <input id="bairro" asp-for="Bairro" type="text" disabled>
+            </div>
+
+            <div class="campo-dados">
+                <label for="numero">Número</label>
+                <input id="numero" asp-for="Numero" type="text" disabled>
+            </div>
+
+            <div class="campo-dados">
+                <label for="complemento">Complemento</label>
+                <input id="complemento" asp-for="Complemento" type="text" disabled>
+            </div>
+        </form>
+
+        <div class="botoes-dados">
+            <form asp-controller="Cliente" asp-action="ExcluirConta" method="post" onsubmit="return confirmarExclusao()">
+                <button type="submit" class="botao-tipo2" id="botao-excluir">Excluir conta</button>
+            </form>
+
+            <a class="botao-tipo2 btn-azul" asp-controller="Cliente" asp-action="AlterarDados">
+                Alterar dados
+            </a>
+        </div>
+    </section>
+</main>
+
+<script>
+    function confirmarExclusao() {
+        return confirm("Tem certeza que deseja excluir sua conta? Essa ação não pode ser desfeita.");
+    }
+</script>

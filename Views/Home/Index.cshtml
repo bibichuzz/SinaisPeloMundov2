@@ -1,0 +1,178 @@
+﻿@inject SinaisPeloMundo.Helper.ISessao Sessao
+@model List<PacoteModel>
+@{
+    ViewData["Title"] = "Home - Sinais pelo Mundo";
+}
+    <main>
+        <section class="home-hero-section">
+            <div class="home-container home-hero-wrapper">
+                <article class="home-hero-content">
+                    <h1 class="home-hero-title">
+                        Descubra experiências incríveis com interpretação inclusiva
+                    </h1>
+                    <p class="home-hero-description">
+                        Encontre pacotes completos de viagem com hotel, passagem e intérprete para sua tranquilidade e conforto.
+                    </p>
+                </article>
+
+                <div class="home-hero-banner">
+                <img src="https://github.com/guimendz/Site-de-Turismo/blob/main/Assets/img/Logo.jpg?raw=true" alt="Banner">
+                </div>
+            </div>
+        </section>
+
+        <section class="home-benefits-section">
+            <div class="home-container home-benefits-grid">
+                <article class="home-benefits-card">
+                <div class="home-benefits-icon">
+                    <span class="material-symbols-outlined">
+                        person
+                    </span>
+                </div>
+                    <div>
+                        <h3 class="home-benefits-card-title">Intérpretes Qualificados</h3>
+                        <p class="home-benefits-card-description">Profissionais experientes e certificados.</p>
+                    </div>
+                </article>
+
+                <article class="home-benefits-card">
+                <div class="home-benefits-icon">
+                    <span class="material-symbols-outlined">
+                        trip
+                    </span>
+                </div>
+                    <div>
+                        <h3 class="home-benefits-card-title">Viagens Completas</h3>
+                        <p class="home-benefits-card-description">Hotel, passagem e intérprete em um só pacote.</p>
+                    </div>
+                </article>
+
+                <article class="home-benefits-card">
+                <div class="home-benefits-icon">
+                    <span class="material-symbols-outlined">
+                        support_agent
+                    </span>
+                </div>
+                    <div>
+                        <h3 class="home-benefits-card-title">Atendimento Especializado</h3>
+                        <p class="home-benefits-card-description">Suporte dedicado antes, durante e após a viagem.</p>
+                    </div>
+                </article>
+
+                <article class="home-benefits-card">
+                    <div class="home-benefits-icon">
+                    <span class="material-symbols-outlined">
+                        shield
+                    </span>
+                    </div>
+                    <div>
+                        <h3 class="home-benefits-card-title">Segurança e Conforto</h3>
+                        <p class="home-benefits-card-description">Sua tranquilidade em cada detalhe da viagem.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="home-packages-section">
+            <div class="home-container">
+
+                <div class="home-packages-header">
+                    <h2 class="home-packages-title">
+                        Pacotes em destaque
+                    </h2>
+
+                    <a asp-controller="Home" asp-action="Catalogo" class="home-packages-link">
+                        Ver todos
+                    </a>
+                </div>
+
+                <div class="home-packages-grid">
+
+                    @foreach (var pacote in Model)
+                    {
+                        <article class="home-package-card">
+
+                            <a asp-controller="Pacote"
+                               asp-action="DetalhesPacote"
+                               asp-route-id="@pacote.PacoteId">
+
+                                <div class="home-package-image">
+                                    <img src="@pacote.UrlImagem" alt="Imagem">
+                                </div>
+
+                            </a>
+
+                            <div class="home-package-content">
+
+                                <a asp-controller="Pacote"
+                                   asp-action="DetalhesPacote"
+                                   asp-route-id="@pacote.PacoteId">
+
+                                    <h3 class="home-package-location">
+                                        @pacote.Destino
+                                    </h3>
+
+                                </a>
+
+                                <p class="home-package-info">
+
+                                    @pacote.ReservaHotel.DataCheckin.ToString("dd/MM/yyyy")
+
+                                    -
+
+                                    @pacote.ReservaHotel.DataCheckout.ToString("dd/MM/yyyy")
+
+                                </p>
+
+                                <p class="home-package-info">
+
+                                    @pacote.Preco.ToString("C")
+
+                                </p>
+
+                            </div>
+
+                        </article>
+                    }
+
+                </div>
+            </div>
+        </section>
+    <div class="chat-container">
+        <div class="chat-header">
+            <img src="https://i.imgur.com/6DLl5px.png" alt="Icon">
+            <p>TravelSafe &#x2708;<br>Assistente Virutal</p>
+            <div class="icon-header-chat">
+                <span class="material-symbols-outlined">close</span>
+            </div>
+        </div>
+
+        <div class="chat-messages-wrapper">
+            <div class="chat-apresentation">
+                <p>Olá! &#9995;</p>
+                <p> Eu sou o <strong>Safe</strong>, seu assistente de viagem!</p>
+                <p>Como posso te ajudar hoje?</p>
+            </div>
+            <div class="chat-messages">
+                <p class="user-messages">Ótimo, quero viajar!</p>
+                <p class="bot-messages">Que incrível!<br>Qual destino você tem em mente?</p>
+                <p class="user-messages">Teste</p>
+                <p class="bot-messages">Teste</p>
+                <p class="user-messages">Teste</p>
+            </div>
+        </div>
+
+        <div class="send-message">
+            <form action="">
+                <input type="text" id="message" placeholder="Digite sua mensagem...">
+            </form>
+            <button class="send-button">
+                <span class="material-symbols-outlined">send</span>
+            </button>
+        </div>
+    </div>
+
+    <button class="chat-botao">
+        <img src="https://i.imgur.com/6DLl5px.png" alt="Icon">
+    </button>
+    </main>

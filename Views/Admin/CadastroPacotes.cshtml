@@ -1,0 +1,224 @@
+﻿@inject SinaisPeloMundo.Helper.ISessao Sessao
+@model PacoteModel
+
+@{
+    ViewData["Title"] = "Admin - Cadastro de Pacotes";
+}
+
+<main class="container-revisao">
+
+    <aside class="sidebar-dados-pessoais" id="tiSidebar">
+
+        <nav class="sidebar-dados">
+
+            <a href="javascript:history.back()" class="voltar">
+                &lt; Voltar
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaInterprete">
+                Cadastro de intérprete
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaHoteis">
+                Cadastro de reserva de hotel
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaPassagens">
+                Cadastro de passagem
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaPacotes" class="tela-atual">
+
+                Cadastros de pacotes
+
+            </a>
+
+            <a asp-controller="Cliente"
+               asp-action="DadosPessoais">
+
+                Sair
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <section class="cadastro-catalogo">
+
+        <h1>Cadastro de Pacotes</h1>
+
+        <p class="sub-titulo">
+            Preencha os dados abaixo para cadastrar um novo pacote
+        </p>
+
+        <form asp-controller="Admin"
+              asp-action="CadastroPacotes"
+              method="post"
+              class="form-dados">
+
+            <div asp-validation-summary="ModelOnly"></div>
+
+            <div class="campo-dados">
+
+                <label class="rotulo-catalogo" asp-for="PassagemId">
+                    ID Passagem
+                </label>
+
+                <select asp-for="PassagemId" required>
+
+                    <option value="0">
+                        Selecione uma passagem
+                    </option>
+
+                    @foreach (var passagem in ViewBag.Passagens)
+                    {
+                        <option value="@passagem.PassagemId">
+
+                            ID @passagem.PassagemId - @passagem.HorarioChegada.ToString("dd/MM/yyyy HH:mm") @(passagem.LocalChegada.Length >= 3
+                        ? passagem.LocalChegada.Substring(0, 3).ToUpper()
+                        : passagem.LocalChegada.ToUpper())
+
+
+                        </option>
+                    }
+
+                </select>
+
+                <span asp-validation-for="PassagemId" class="text-danger"></span>
+
+            </div>
+
+            <div class="campo-dados">
+
+                <label class="rotulo-catalogo" asp-for="ReservaHotelId">
+                    ID reserva hotel
+                </label>
+
+                <select asp-for="ReservaHotelId" required>
+
+                    <option value="0">
+                        Selecione uma reserva
+                    </option>
+
+                    @foreach (var reserva in ViewBag.ReservasHotel)
+                    {
+                        <option value="@reserva.ReservaHotelId">
+
+                            ID @reserva.ReservaHotelId - @reserva.NomeHotel @reserva.DataCheckin.ToString("dd/MM/yyyy HH:mm")
+
+                        </option>
+                    }
+
+                </select>
+
+                <span asp-validation-for="ReservaHotelId" class="text-danger"></span>
+
+            </div>
+
+            <div class="campo-dados">
+
+                <label class="rotulo-catalogo" asp-for="InterpreteId">
+                    ID Intérprete
+                </label>
+
+                <select asp-for="InterpreteId" required>
+
+                    <option value="0">
+                        Selecione um intérprete
+                    </option>
+
+                    @foreach (var interprete in ViewBag.Interpretes)
+                    {
+                        <option value="@interprete.InterpreteId">
+
+                            ID @interprete.InterpreteId - @interprete.NomeInterprete
+
+                        </option>
+                    }
+
+                </select>
+
+                <span asp-validation-for="InterpreteId" class="text-danger"></span>
+
+            </div>
+
+            <div class="campo-dados">
+
+                <label class="rotulo-catalogo" asp-for="Preco">
+                    Preço
+                </label>
+
+                <input asp-for="Preco"
+                       type="number"
+                       placeholder="R$ 0,00"
+                       required>
+
+                <span asp-validation-for="Preco" class="text-danger"></span>
+
+            </div>
+
+            <div class="campo-dados">
+
+                <label class="rotulo-catalogo" asp-for="Destino">
+                    Destino
+                </label>
+
+                <input asp-for="Destino"
+                       type="text"
+                       placeholder="Ex: Praia de Copacabana"
+                       required>
+
+                <span asp-validation-for="Destino" class="text-danger"></span>
+
+            </div>
+
+            <div class="campo-dados">
+
+                <label class="rotulo-catalogo" asp-for="UrlImagem">
+                    URL da imagem
+                </label>
+
+                <input asp-for="UrlImagem"
+                       type="text"
+                       placeholder="Digite a URL da imagem"
+                       required>
+
+                <span asp-validation-for="UrlImagem" class="text-danger"></span>
+
+            </div>
+
+            <div class="botoes-catalogo">
+
+                <a asp-controller="Admin"
+                   asp-action="ListaPacotes"
+                   class="botao-tipo3 botao-cancelar">
+
+                    Cancelar
+
+                </a>
+
+                <button class="botao-tipo3 btn-catalogo-salvar"
+                        type="submit">
+
+                    Salvar
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

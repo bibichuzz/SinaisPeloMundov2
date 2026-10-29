@@ -1,0 +1,277 @@
+﻿@inject SinaisPeloMundo.Helper.ISessao Sessao
+@model List<ReservaHotelModel>
+
+@{
+    ViewData["Title"] = "Admin - Reservas Hotel";
+}
+
+<main class="container-revisao">
+
+    <aside class="sidebar-dados-pessoais" id="tiSidebar">
+
+        <nav class="sidebar-dados">
+
+            <a href="javascript:history.back()" class="voltar">
+                &lt; Voltar
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaInterprete">
+                Cadastro de intérprete
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaHoteis" class="tela-atual">
+                Cadastro de reserva de hotel
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="ListaPassagens">
+                Cadastro de passagem
+            </a>
+
+            <a
+               asp-controller="Admin"
+               asp-action="ListaPacotes">
+
+                Cadastros de pacotes
+
+            </a>
+
+            <a asp-controller="Cliente"
+               asp-action="DadosPessoais">
+
+                Sair
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <section class="conteudo-catalogo">
+
+        @if (TempData["MensagemErro"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["MensagemErro"]
+            </div>
+        }
+
+        @if (TempData["MensagemSucesso"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["MensagemSucesso"]
+            </div>
+        }
+
+        <div class="topo-catalogo">
+
+            <div class="titulos-catalogo">
+
+                <h1>Catálogo de Cadastros de Reserva de Hotel</h1>
+
+                <p class="sub-titulo">
+                    Gerencie as reservas de hotel cadastradas no sistema.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="ferramentas-catalogo">
+
+            <div class="busca-wrapper">
+
+                <span class="material-symbols-outlined icone-busca">
+                    search
+                </span>
+
+                <input type="text"
+                       class="input-base"
+                       id="input-busca"
+                       placeholder="Buscar reserva por ID, hotel...">
+
+            </div>
+
+            <a asp-controller="Admin"
+               asp-action="CadastroHoteis">
+
+                <button class="botao-novo">
+                    + Novo
+                </button>
+
+            </a>
+
+        </div>
+
+        <div class="tabela-responsiva">
+
+            <div class="tabela-cabecalho">
+
+                <div>
+                    <strong>ID</strong>
+                </div>
+
+                <div>
+                    <strong>Hotel</strong>
+                </div>
+
+                <div>
+                    <strong>Endereço</strong>
+                </div>
+
+                <div></div>
+
+                <div>
+                    <strong>Check-in</strong>
+                </div>
+
+                <div>
+                    <strong>Check-out</strong>
+                </div>
+
+                <div>
+                    <strong>Preço total</strong>
+                </div>
+
+                <div class="col-acoes">
+                    <strong>Ações</strong>
+                </div>
+
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="card-base">
+
+                    <p>
+                        Nenhuma reserva de hotel cadastrada.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                @foreach (var reservaHotel in Model)
+                {
+                    <div class="tabela-card card-base card-hotel">
+
+                        <div class="tabela-campo campo-base"
+                             data-label="ID">
+
+                            @reservaHotel.ReservaHotelId
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="Hotel">
+
+                            @reservaHotel.NomeHotel
+
+                        </div>
+
+                        <div class="tabela-campo campo-base coluna-2"
+                             data-label="Endereço">
+
+                            @reservaHotel.EnderecoHotel
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="Check-in">
+
+                            @reservaHotel.DataCheckin.ToString("dd/MM/yyyy HH:mm")
+
+                        </div>
+
+                        <div class="tabela-campo campo-base"
+                             data-label="Check-out">
+
+                            @reservaHotel.DataCheckout.ToString("dd/MM/yyyy HH:mm")
+
+                        </div>
+
+
+                        <div class="tabela-campo campo-base"
+                             data-label="Preço total">
+
+                            R$ @reservaHotel.Preco.ToString("N2")
+
+                        </div>
+
+                        <div class="tabela-campo col-acoes">
+
+                            <a asp-controller="Admin"
+                               asp-action="EditarHotel"
+                               asp-route-id="@reservaHotel.ReservaHotelId"
+                               class="acao-link acao-editar">
+
+                                Editar
+
+                            </a>
+
+                            <form asp-action="ExcluirHotel"
+                                  asp-controller="Admin"
+                                  method="post"
+                                  onsubmit="return confirmarExclusao();">
+
+                                <input type="hidden" name="id" value="@reservaHotel.ReservaHotelId" />
+
+                                <button type="submit"
+                                        class="acao-link acao-excluir">
+
+                                    Excluir
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                }
+            }
+
+        </div>
+
+    </section>
+
+</main>
+
+<script>
+
+    function confirmarExclusao() {
+        return confirm(
+            "Tem certeza que deseja excluir este pacote? Essa ação não pode ser desfeita."
+        );
+    }
+    // Script Busca
+    const inputBusca =
+        document.getElementById("input-busca");
+
+    const cards =
+        document.querySelectorAll(".card-hotel");
+
+    inputBusca.addEventListener("input", function () {
+
+        const valor =
+            this.value.toLowerCase();
+
+        cards.forEach(card => {
+
+            const textoCard =
+                card.innerText.toLowerCase();
+
+            if (textoCard.includes(valor)) {
+                card.style.display = "grid";
+            }
+            else {
+                card.style.display = "none";
+            }
+
+        });
+
+    });
+
+</script>

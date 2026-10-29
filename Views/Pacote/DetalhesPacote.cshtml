@@ -1,0 +1,204 @@
+﻿@inject SinaisPeloMundo.Helper.ISessao Sessao
+@model PacoteModel
+@{
+    ViewData["Title"] = "Detalhes do Pacote";
+}
+    <main class="container-revisao">
+
+        <aside class="sidebar-dados-pessoais" id="tiSidebar">
+            <nav class="sidebar-dados">
+                <a href="javascript:history.back()" class="voltar">&lt; Voltar</a>
+                <a class="tela-atual" asp-controller="Pacote" asp-for="DetalhesPedido">Detalhes do pacote</a>
+            </nav>
+        </aside>
+
+        <section class="revisao-de-pacote">
+            <h1>Detalhes do pacote</h1>
+        <p class="sub-titulo">Confira o que está incluído no seu pacote de viagem</p>
+
+            <div class="checkout-wrapper">
+                <div class="detalhes-coluna-pacote">
+                    <article class="card-item-principal">
+                        <div class="img-container" id="img-container-detalhe">
+                            <img src="@Model.UrlImagem" alt="imagem">
+                        </div>
+                    </article>
+
+                    <div class="servicos-lista">
+                        <div class="item-info-header">
+                            <h2>@Model.Destino</h2>
+                            <p>Pacote completo com hotel, passagem aérea e intérprete durante toda a viagem.</p>
+                        </div>
+                        <div class="servico-item">
+                            <span class="material-symbols-outlined icon-box">hotel</span>
+                            <div class="servico-txt">
+                                <h3>Hotel</h3>
+                                <p>@Model.ReservaHotel.NomeHotel</p>
+                                <address>
+                                    <span class="material-symbols-outlined inline-icon">
+                                        location_on
+                                    </span>
+
+                                    @Model.ReservaHotel.EnderecoHotel
+                                </address>
+                                <p>
+                                    <span class="material-symbols-outlined inline-icon">
+                                        calendar_month
+                                    </span>
+                                    Check-In:
+                                    @Model.ReservaHotel.DataCheckin.ToString("dd/MM/yyyy HH:mm")
+
+                                    · Check-Out:
+                                    @Model.ReservaHotel.DataCheckout.ToString("dd/MM/yyyy HH:mm")
+                                </p>
+                            </div>
+                        </div>
+                        <div class="servico-item">
+                            <span class="material-symbols-outlined icon-box">
+                                flight
+                            </span>
+                            <div class="servico-txt">
+
+                                <h3>Passagem aérea</h3>
+
+                                <p>
+                                    @Model.Passagem.LocalPartida
+                                    ➔
+                                    @Model.Passagem.LocalChegada
+                                </p>
+
+                                <p>
+                                    <span class="material-symbols-outlined inline-icon">
+                                        calendar_month
+                                    </span>
+
+                                    Ida:
+                                    @Model.Passagem.HorarioPartida.ToString("dd/MM/yyyy HH:mm")
+
+                                    · Chegada:
+                                    @Model.Passagem.HorarioChegada.ToString("dd/MM/yyyy HH:mm")
+                                </p>
+
+                                <p>
+                                    <span class="material-symbols-outlined inline-icon">
+                                        directions_car
+                                    </span>
+                                    @Model.Passagem.Transporte, @Model.Passagem.TipoPassagem</p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="servico-item">
+
+                            <span class="material-symbols-outlined icon-box">
+                                person
+                            </span>
+
+                            <div class="servico-txt">
+
+                                <h3>Intérprete</h3>
+
+                                <p>@Model.Interprete.NomeInterprete</p>
+
+                                <p>
+                                    <span class="material-symbols-outlined inline-icon">
+                                        call
+                                    </span>
+
+                                    @Model.Interprete.Telefone
+                                </p>
+
+                                <p>
+                                    <span class="material-symbols-outlined inline-icon">
+                                        email
+                                    </span>
+
+                                    @Model.Interprete.Email
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <aside class="resumo-coluna">
+
+                    <div class="resumo-card">
+
+                        <div class="preco-individual">
+
+                            <p><strong>Preço por pessoa</strong></p>
+
+                            <p class="valor-foco">
+                                R$ @Model.Preco.ToString("N2")
+                            </p>
+
+                        </div>
+
+                        <div class="itens-inclusos">
+
+                            <h4>O que está incluído</h4>
+
+                            <ul>
+
+                                <li>
+                                    <span class="material-symbols-outlined">
+                                        check_circle
+                                    </span>
+
+                                    Hotel
+                                </li>
+
+                                <li>
+                                    <span class="material-symbols-outlined">
+                                        check_circle
+                                    </span>
+
+                                    Passagem de ida e volta
+                                </li>
+
+                                <li>
+                                    <span class="material-symbols-outlined">
+                                        check_circle
+                                    </span>
+
+                                    Intérprete durante todo o período
+                                </li>
+
+                                <li>
+                                    <span class="material-symbols-outlined">
+                                        check_circle
+                                    </span>
+
+                                    Suporte 24h
+                                </li>
+
+                                <li>
+                                    <span class="material-symbols-outlined">
+                                        check_circle
+                                    </span>
+                                    Seguro viagem
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    <a asp-controller="Pedido" asp-action="RevisarCompra"
+                       asp-route-id="@Model.PacoteId" class="botao-tipo4">
+                            COMPRAR PACOTE
+                        </a>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+    </main>
