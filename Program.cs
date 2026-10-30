@@ -3,6 +3,9 @@ using SinaisPeloMundo.Data;
 using SinaisPeloMundo.Helper;
 using SinaisPeloMundo.Repositorio;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +34,25 @@ builder.Services.AddSession(o =>
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR();
+
+var chaveJwt = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException("Configure Jwt:Key (user-secrets ou variável Jwt__Key).");
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(o =>
+    {
+        o.MapInboundClaims = false;
+        o.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.FromMinutes(1),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(chaveJwt))
+        };
+    });
 
 builder.Services.AddCors(options =>
 {
@@ -74,6 +96,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
