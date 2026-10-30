@@ -1,5 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using SinaisPeloMundo.Helper;
+using System.ComponentModel.DataAnnotations;
 
 namespace SinaisPeloMundo.Models
 {
@@ -25,6 +26,7 @@ namespace SinaisPeloMundo.Models
         [Required(ErrorMessage = "CPF é obrigatório.")]
         [MaxLength(11, ErrorMessage = "CPF deve ter 11 dígitos.")]
         [RegularExpression(@"^\d{11}$", ErrorMessage = "CPF deve conter apenas números.")]
+        [CpfValido]
         public string Cpf { get; set; }
 
         [Required(ErrorMessage = "CEP é obrigatório.")]

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SinaisPeloMundo.Helper;
+using System.ComponentModel.DataAnnotations;
 
 namespace SinaisPeloMundo.Dtos
 {
@@ -26,6 +27,7 @@ namespace SinaisPeloMundo.Dtos
 
         [Required(ErrorMessage = "CPF é obrigatório.")]
         [RegularExpression(@"^\d{11}$", ErrorMessage = "CPF deve ter 11 números.")]
+        [CpfValido]
         public string Cpf { get; set; } = "";
 
         [Required(ErrorMessage = "CEP é obrigatório.")]
