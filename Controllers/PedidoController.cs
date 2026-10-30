@@ -65,9 +65,8 @@ namespace SinaisPeloMundo.Controllers
                 _protector.Protect(
                     pedido.PedidoId.ToString());
 
-            string url =
-                "https://cdnn7bqm-7058.brs.devtunnels.ms" +
-                $"/Pedido/ConfirmarPagamentoQr?token={token}";
+            string baseUrl = $"{Request.Scheme}://{Request.Host}";
+            string url = $"{baseUrl}/Pedido/ConfirmarPagamentoQr?token={Uri.EscapeDataString(token)}";
 
             using var qrGenerator = new QRCoder.QRCodeGenerator();
 
@@ -108,7 +107,9 @@ namespace SinaisPeloMundo.Controllers
                 .Group(pedidoId.ToString())
                 .SendAsync("PagamentoConfirmado");
 
-            return Ok();
+            return Content(
+                "Pagamento confirmado! Você já pode voltar ao aplicativo.",
+                "text/plain; charset=utf-8");
         }
         [HttpGet]
         public IActionResult CompraEfetuada(int pedidoId)
