@@ -52,7 +52,6 @@ namespace SinaisPeloMundo.Dtos
         // Só enviadas quando a pessoa quer trocar a senha
         public string? SenhaAtual { get; set; }
 
-        [MinLength(6, ErrorMessage = "A nova senha deve ter pelo menos 6 caracteres.")]
         [MaxLength(100, ErrorMessage = "Senha muito grande.")]
         public string? NovaSenha { get; set; }
     }
