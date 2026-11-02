@@ -8,11 +8,19 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using SinaisPeloMundo.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var apiKeyGemini = builder.Configuration["Gemini:ApiKey"]
+    ?? throw new InvalidOperationException(
+        "Configure Gemini:ApiKey (user-secrets ou variável Gemini__ApiKey).");
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// API Gemini
+builder.Services.AddHttpClient<GeminiService>();
 
 // conexão com Supabase
 

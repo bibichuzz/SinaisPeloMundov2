@@ -163,41 +163,39 @@
     </section>
     <div class="chat-container">
         <div class="chat-header">
-            <img src="Assets/img/icone-chat.PNG" alt="Icon">
-            <p>TravelSafe &#x2708;<br>Assistente Virutal</p>
+            <img src="https://i.imgur.com/6DLl5px.png" alt="Icon">
+            <p>TravelSafe &#x2708;<br>Assistente Virtual</p>
             <div class="icon-header-chat">
-                <span class="material-symbols-outlined">minimize</span>
                 <span class="material-symbols-outlined">close</span>
             </div>
         </div>
 
         <div class="chat-messages-wrapper">
-            <div class="chat-apresentation">
+            <div class="chat-apresentation" id="chatApresentation">
                 <p>Olá! &#9995;</p>
                 <p> Eu sou o <strong>Safe</strong>, seu assistente de viagem!</p>
                 <p>Como posso te ajudar hoje?</p>
             </div>
-            <div class="chat-messages">
-                <p class="user-messages">Ótimo, quero viajar!</p>
-                <p class="bot-messages">Que incrível!<br>Qual destino você tem em mente?</p>
-                <p class="user-messages">Teste</p>
-                <p class="bot-messages">Teste</p>
-                <p class="user-messages">Teste</p>
+            <div class="chat-messages" id="chatMessages">
             </div>
         </div>
 
         <div class="send-message">
-            <form action="">
-                <input type="text" id="message" placeholder="Digite sua mensagem...">
+            <form id="chatForm">
+                <input type="text"
+                       id="message"
+                       placeholder="Digite sua mensagem..."
+                       autocomplete="off">
+
+                <button type="submit" class="send-button">
+                    <span class="material-symbols-outlined">send</span>
+                </button>
             </form>
-            <button class="send-button">
-                <span class="material-symbols-outlined">send</span>
-            </button>
         </div>
     </div>
 
     <button class="chat-botao">
-        <img src="Assets/img/chat-btn.PNG" alt="Icon">
+        <img src="https://i.imgur.com/6DLl5px.png" alt="Icon">
     </button>
 
 </main>
@@ -331,3 +329,5 @@
 
     </script>
 }
+
+<script src="~/js/chatbot.js" asp-append-version="true"></script>

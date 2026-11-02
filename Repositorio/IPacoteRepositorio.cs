@@ -1,10 +1,16 @@
 ﻿using SinaisPeloMundo.Models;
+using SinaisPeloMundo.Dtos;
 
 namespace SinaisPeloMundo.Repositorio
 {
     public interface IPacoteRepositorio
     {
-        public List<PacoteModel> BuscarUltimosPacotes();
-        public List<PacoteModel> BuscarPacotes();
+        List<PacoteModel> BuscarUltimosPacotes();
+
+        List<PacoteModel> BuscarPacotes();
+
+        List<PacoteModel> BuscarPacotesParaChatbot();
+
+        List<PacoteChatbotDTO> BuscarPacotesParaRecomendacao();
     }
 }
